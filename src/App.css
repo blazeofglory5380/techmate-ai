@@ -2508,25 +2508,24 @@ select:focus {
 .landing-shell {
     min-height: 100vh;
     width: 100%;
-    background: #0b1220;
+    background: var(--bg);
     overflow-x: hidden;
 }
 
 .landing-page {
     position: relative;
-    min-height: 100vh;
     width: 100%;
-    background: #0b1220;
+    background: var(--bg);
 }
 
 .landing-nav {
-    position: absolute;
+    position: sticky;
     top: 0;
     left: 0;
     right: 0;
     z-index: 30;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(180deg, rgba(8, 15, 30, 0.82), rgba(8, 15, 30, 0.42));
+    background: linear-gradient(180deg, rgba(8, 15, 30, 0.92), rgba(8, 15, 30, 0.88));
     -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
 }
@@ -2677,29 +2676,29 @@ select:focus {
 }
 
 .hero-cinematic--landing {
-    align-items: center;
-    min-height: 100vh;
-    min-height: 100svh;
+    min-height: clamp(520px, 90vh, 100vh);
+    min-height: clamp(520px, 90svh, 100svh);
     width: 100%;
 }
 
-.hero-cinematic--landing .hero-cinematic-copy {
-    display: flex;
-    align-items: center;
-    min-height: 100vh;
-    min-height: 100svh;
-    padding-top: 84px;
-    padding-bottom: clamp(32px, 6vh, 72px);
-    max-width: none;
+.hero-cinematic--video-only {
+    display: block;
 }
 
-.hero-cinematic--landing .hero-cinematic-vignette {
-    background: linear-gradient(
-        90deg,
-        rgba(8, 15, 30, 0.5) 0%,
-        rgba(8, 15, 30, 0.12) 42%,
-        transparent 68%
-    );
+.hero-cinematic--video-only .hero-cinematic-media {
+    position: absolute;
+    inset: 0;
+}
+
+.landing-home-content {
+    background: var(--bg);
+    width: 100%;
+}
+
+.landing-home-content .home-layout {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px clamp(16px, 3vw, 28px) 28px;
 }
 
 .hero-cinematic-media {
@@ -3734,14 +3733,13 @@ select:focus {
 }
 
 @media (max-width: 680px) {
-    .hero-cinematic--landing .hero-cinematic-copy {
-        align-items: flex-end;
-        padding-top: 76px;
-        padding-bottom: 28px;
+    .hero-cinematic--landing {
+        min-height: clamp(360px, 80vh, 560px);
+        min-height: clamp(360px, 80svh, 560px);
     }
 
-    .hero-cinematic--landing .hero-cinematic-scrim {
-        max-width: 100%;
+    .landing-home-content .home-layout {
+        padding: 16px 12px 24px;
     }
 }
 

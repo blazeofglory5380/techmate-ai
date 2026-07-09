@@ -1195,6 +1195,7 @@ function LandingNav() {
 
                                             function HomePage() {
                                                 const heroVideoRef = useRef(null);
+                                                const [scanIdx, setScanIdx] = useState(0);
 
                                                 useEffect(() => {
                                                     const video = heroVideoRef.current;
@@ -1216,10 +1217,18 @@ function LandingNav() {
                                                     };
                                                 }, []);
 
+                                                const recentScans = [
+                                                    { label: "DHCP Issue", color: "#1e293b", text: "#fff", name: "Screenshot_2025-05-13_10-24.png", time: "2 minutes ago", bg: "linear-gradient(180deg, rgba(255,255,255,0.08), transparent 38%), repeating-linear-gradient(0deg, rgba(34,197,94,0.16) 0 1px, transparent 1px 12px), linear-gradient(135deg, #020617 0%, #111827 58%, #0f172a 100%)" },
+                                                    { label: "Windows Event", color: "#2563eb", text: "#fff", name: "Event_Viewer_Error.png", time: "45 minutes ago", bg: "linear-gradient(90deg, rgba(37,99,235,0.22) 0 26%, transparent 26%), repeating-linear-gradient(0deg, rgba(148,163,184,0.26) 0 1px, transparent 1px 13px), linear-gradient(135deg, #ffffff 0%, #eef4ff 100%)" },
+                                                    { label: "Blue Screen", color: "#1d4ed8", text: "#fff", name: "BSOD_MEMORY_MANAGEMENT.png", time: "1 hour ago", bg: "radial-gradient(circle at 18% 28%, rgba(255,255,255,0.36) 0 18px, transparent 19px), linear-gradient(135deg, #0f6bff 0%, #0757d8 55%, #043ea8 100%)" },
+                                                    { label: "Network Device", color: "#374151", text: "#fff", name: "Switch_Port_Issue.jpg", time: "2 hours ago", bg: "linear-gradient(175deg, transparent 0 46%, rgba(15,23,42,0.9) 47% 76%, transparent 77%), repeating-linear-gradient(90deg, transparent 0 15px, rgba(34,197,94,0.85) 15px 20px, transparent 20px 28px), linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)" },
+                                                ];
+                                                const visibleScans = 3;
+
                                                 return (
                                                     <div className="landing-page">
                                                         <LandingNav />
-                                                        <section className="hero-cinematic hero-cinematic--landing" aria-label="TechMate AI homepage hero">
+                                                        <section className="hero-cinematic hero-cinematic--landing hero-cinematic--video-only" aria-label="TechMate AI homepage hero video">
                                                             <div className="hero-cinematic-media" aria-hidden="true">
                                                                 <div className="hero-cinematic-fallback" />
                                                                 <video
@@ -1236,26 +1245,93 @@ function LandingNav() {
                                                                         type="video/mp4"
                                                                     />
                                                                 </video>
-                                                                <div className="hero-cinematic-vignette" />
                                                             </div>
-                                                            <div className="hero-cinematic-copy">
-                                                                <div className="hero-cinematic-scrim">
-                                                                    <p className="eyebrow eyebrow-on-video">IT Technician Command Center</p>
-                                                                    <h1>IT troubleshooting, diagnostics, and <em>repair reports</em> in one workspace.</h1>
-                                                                    <p>TechMate AI helps technicians, help desk teams, network engineers, MSPs, and students diagnose tickets, inspect screenshots, run network checks, and document fixes faster.</p>
-                                                                    <div className="hero-cta-row">
-                                                                        <Link className="primary-btn hero-primary-btn" to="/ai-assistant">
-                                                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                                                                            Ask TechMate AI
-                                                                        </Link>
-                                                                        <Link className="hero-ghost-btn hero-secondary-btn hero-ghost-btn-on-video" to="/repair-reports">
-                                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
-                                                                            Open Repair Reports
-                                                                        </Link>
+                                                        </section>
+
+                                                        <div className="landing-home-content">
+                                                            <div className="home-layout">
+                                                                <div className="home-main">
+                                                                    <section className="home-cards-section">
+                                                                        <div className="home-cards-grid">
+                                                                            {ACTION_CARDS.map(({ label, path, desc, color, iconColor, icon }) => (
+                                                                                <Link to={path} key={label} className="action-card">
+                                                                                    <div className="action-card-icon" style={{background: color, color: iconColor}}>{icon}</div>
+                                                                                    <strong>{label}</strong>
+                                                                                    <span>{desc}</span>
+                                                                                    <span className="action-card-arrow">→</span>
+                                                                                </Link>
+                                                                            ))}
+                                                                        </div>
+                                                                    </section>
+
+                                                                    <section className="recent-scans-section">
+                                                                        <div className="recent-scans-header">
+                                                                            <h2>Recent Scans</h2>
+                                                                            <Link to="/ai-vision" className="view-all-link">View all scans →</Link>
+                                                                        </div>
+                                                                        <div className="recent-scans-wrap">
+                                                                            <button type="button" className="scroll-btn" onClick={() => setScanIdx(Math.max(0, scanIdx - 1))} disabled={scanIdx === 0}>‹</button>
+                                                                            <div className="recent-scans-track">
+                                                                                {recentScans.slice(scanIdx, scanIdx + visibleScans).map((scan) => (
+                                                                                    <div className="recent-scan-item" key={scan.name}>
+                                                                                        <div className="scan-preview" style={{background: scan.bg}}>
+                                                                                            <span className="scan-label-badge" style={{background: scan.color, color: scan.text}}>{scan.label}</span>
+                                                                                        </div>
+                                                                                        <div className="scan-item-info">
+                                                                                            <span className="scan-item-name">{scan.name}</span>
+                                                                                            <span className="scan-item-time">{scan.time}</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                ))}
+                                                                            </div>
+                                                                            <button type="button" className="scroll-btn" onClick={() => setScanIdx(Math.min(recentScans.length - visibleScans, scanIdx + 1))} disabled={scanIdx >= recentScans.length - visibleScans}>›</button>
+                                                                        </div>
+                                                                    </section>
+                                                                </div>
+
+                                                                <div className="home-rail">
+                                                                    <div className="rail-panel">
+                                                                        <h2>Recent Activity</h2>
+                                                                        <div className="rail-activity-list">
+                                                                            {RECENT_ACTIVITY_DATA.map((item) => (
+                                                                                <div className="rail-activity-item" key={item.label}>
+                                                                                    <div className="rail-activity-icon" style={{background: item.bg, color: item.color}}>{item.icon}</div>
+                                                                                    <div>
+                                                                                        <strong>{item.label}</strong>
+                                                                                        <span>{item.time}</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                        <Link to="/repair-reports" className="view-all-link" style={{display:"block",marginTop:"14px"}}>View all activity →</Link>
+                                                                    </div>
+
+                                                                    <div className="rail-panel">
+                                                                        <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"14px"}}>
+                                                                            <span style={{color:"var(--blue)"}}>💡</span>
+                                                                            <h2 style={{margin:0}}>Quick Tips</h2>
+                                                                        </div>
+                                                                        {QUICK_TIPS_DATA.map((tip, i) => (
+                                                                            <div className="tip-item" key={i}>
+                                                                                <span className="tip-bullet">●</span>
+                                                                                <span className="tip-text">{tip}</span>
+                                                                            </div>
+                                                                        ))}
+                                                                        <Link to="/troubleshooting" className="view-all-link" style={{display:"block",marginTop:"14px"}}>View all tips →</Link>
+                                                                    </div>
+
+                                                                    <div className="rail-panel">
+                                                                        <h2>Visual Hardware Library</h2>
+                                                                        <p style={{color:"var(--muted)",fontSize:"0.82rem",margin:"0 0 12px",lineHeight:"1.5"}}>Click any item to see images, brands, and safe handling steps.</p>
+                                                                        <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
+                                                                            {Object.entries(HARDWARE_ITEMS).map(([key, hw]) => (
+                                                                                <HardwareTerm name={key} key={key}>{hw.label}</HardwareTerm>
+                                                                            ))}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </section>
+                                                        </div>
                                                     </div>
                                                 );
                                             }
