@@ -1,0 +1,20 @@
+[
+  {
+    "code": "ERR-DISABLE",
+    "title": "Switch Port Disabled",
+    "cause": "A Cisco switch port was disabled after a violation such as port security, BPDU Guard, link flap, or storm control.",
+    "fixes": [
+      "Check the err-disable reason",
+      "Inspect the connected device and cable",
+      "Resolve the violation",
+      "Re-enable the interface"
+    ],
+    "commands": [
+      "show interfaces status err-disabled",
+      "show logging",
+      "show port-security interface",
+      "shutdown",
+      "no shutdown"
+    ]
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "title": "CompTIA Troubleshooting Process",
+  "steps": [
+    "Identify the problem",
+    "Establish a theory of probable cause",
+    "Test the theory to determine cause",
+    "Establish a plan of action and identify potential effects",
+    "Implement the solution or escalate as necessary",
+    "Verify full system functionality and implement preventive measures",
+    "Document findings, actions, and outcomes"
+  ]
+}

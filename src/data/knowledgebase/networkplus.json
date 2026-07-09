@@ -1,0 +1,23 @@
+[
+  {
+    "title": "DNS Not Resolving",
+    "category": "Network+",
+    "symptoms": [
+      "Websites do not load by name",
+      "Ping by IP works but ping by hostname fails",
+      "Users report intermittent internet access"
+    ],
+    "causes": [
+      "Incorrect DNS server",
+      "DHCP option misconfiguration",
+      "Local DNS cache issue",
+      "Firewall blocking DNS traffic"
+    ],
+    "fixes": [
+      "Verify DNS server settings",
+      "Flush local DNS cache",
+      "Test lookup with nslookup",
+      "Check DHCP scope options and firewall rules"
+    ]
+  }
+]

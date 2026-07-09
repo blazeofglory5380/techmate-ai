@@ -1,0 +1,29 @@
+[
+  {
+    "title": "Switch Port Link Down",
+    "category": "CCNA",
+    "symptoms": [
+      "Interface shows down/down",
+      "Device has no network access",
+      "Switch port LED is off or amber"
+    ],
+    "causes": [
+      "Bad cable",
+      "Disabled interface",
+      "Speed or duplex mismatch",
+      "Incorrect VLAN assignment"
+    ],
+    "fixes": [
+      "Check cable and physical connection",
+      "Run show interfaces status",
+      "Verify VLAN assignment with show vlan brief",
+      "Enable the interface if administratively down"
+    ],
+    "commands": [
+      "show interfaces status",
+      "show vlan brief",
+      "show running-config interface",
+      "show interfaces counters errors"
+    ]
+  }
+]

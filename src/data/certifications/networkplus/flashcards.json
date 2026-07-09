@@ -1,0 +1,7 @@
+[
+  {
+    "question": "What port does DNS use?",
+    "answer": "53",
+    "explanation": "DNS commonly uses UDP port 53 for queries and TCP port 53 for zone transfers or larger responses."
+  }
+]

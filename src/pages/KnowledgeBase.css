@@ -1,0 +1,137 @@
+.knowledge-page {
+  display: grid;
+  gap: 18px;
+}
+
+.knowledge-control-panel,
+.knowledge-link-strip {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(18, 29, 54, 0.82), rgba(10, 16, 31, 0.62)),
+    rgba(12, 18, 34, 0.74);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.knowledge-control-panel {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.knowledge-link-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+}
+
+.knowledge-link-strip a,
+.knowledge-modal-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 9px 12px;
+  border: 1px solid rgba(83, 225, 255, 0.22);
+  border-radius: 12px;
+  color: var(--text);
+  background: rgba(83, 225, 255, 0.08);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.knowledge-link-strip a:hover,
+.knowledge-modal-links a:hover {
+  border-color: rgba(96, 242, 176, 0.35);
+  background: rgba(96, 242, 176, 0.12);
+}
+
+.knowledge-card {
+  text-align: left;
+  color: var(--text);
+}
+
+.knowledge-note-form {
+  margin-top: 4px;
+}
+
+.knowledge-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(2, 6, 14, 0.76);
+  backdrop-filter: blur(16px);
+}
+
+.knowledge-modal {
+  width: min(920px, 100%);
+  max-height: min(86vh, 860px);
+  overflow: auto;
+  display: grid;
+  gap: 16px;
+  padding: 22px;
+  border: 1px solid rgba(83, 225, 255, 0.3);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top right, rgba(83, 225, 255, 0.14), transparent 34%),
+    linear-gradient(145deg, rgba(18, 29, 54, 0.96), rgba(8, 13, 25, 0.96));
+  box-shadow: 0 34px 120px rgba(0, 0, 0, 0.62);
+}
+
+.knowledge-modal header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.knowledge-modal h2 {
+  margin: 8px 0 8px;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.knowledge-modal h3 {
+  margin-bottom: 8px;
+  color: var(--soft);
+  font-size: 0.9rem;
+}
+
+.knowledge-modal p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.knowledge-modal-meta,
+.knowledge-pill-row,
+.knowledge-modal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.knowledge-modal section {
+  padding: 14px;
+  border: 1px solid rgba(142, 180, 255, 0.12);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+@media (max-width: 680px) {
+  .knowledge-modal-backdrop {
+    padding: 10px;
+  }
+
+  .knowledge-modal {
+    max-height: 92vh;
+    padding: 16px;
+  }
+
+  .knowledge-modal header {
+    flex-direction: column;
+  }
+}

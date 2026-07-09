@@ -1,0 +1,13 @@
+[
+  {
+    "code": "0x80070005",
+    "title": "Access Denied",
+    "cause": "The user or process does not have permission to complete the requested action.",
+    "fixes": [
+      "Run as Administrator",
+      "Check NTFS permissions",
+      "Review Group Policy restrictions",
+      "Verify endpoint protection is not blocking the action"
+    ]
+  }
+]

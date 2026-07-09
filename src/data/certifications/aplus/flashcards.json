@@ -1,0 +1,7 @@
+[
+  {
+    "question": "What service manages Windows print jobs?",
+    "answer": "Print Spooler",
+    "explanation": "The Print Spooler service manages print jobs sent to local and network printers."
+  }
+]

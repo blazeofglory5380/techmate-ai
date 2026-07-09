@@ -1,0 +1,13 @@
+[
+  {
+    "code": "E05",
+    "title": "Paper Feed or Sensor Error",
+    "cause": "The printer detects a paper path, feed roller, or sensor problem.",
+    "fixes": [
+      "Remove jammed paper",
+      "Inspect and clean the paper path",
+      "Clean feed rollers",
+      "Power cycle the printer and run a test print"
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "question": "What does MFA help prevent?",
+    "answer": "Unauthorized access from stolen or guessed passwords",
+    "explanation": "Multi-factor authentication requires an additional proof of identity beyond a password."
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "question": "What command shows VLAN assignments on a Cisco switch?",
+    "answer": "show vlan brief",
+    "explanation": "The show vlan brief command lists VLANs and the access ports assigned to each VLAN."
+  }
+]

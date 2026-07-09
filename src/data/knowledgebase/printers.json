@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Printer Not Printing",
+    "category": "Printers",
+    "symptoms": [
+      "Printer shows offline",
+      "Jobs are stuck in the queue",
+      "Users cannot print from one or more workstations"
+    ],
+    "causes": [
+      "Print spooler service stopped",
+      "Network connection lost",
+      "Incorrect printer IP address",
+      "Driver conflict or corrupted queue"
+    ],
+    "fixes": [
+      "Restart the print spooler service",
+      "Verify printer IP address and network connectivity",
+      "Clear stuck jobs from the print queue",
+      "Reinstall or update the printer driver"
+    ]
+  }
+]
