@@ -1,5 +1,5 @@
-﻿import { useMemo, useState } from "react";
-import { Link, NavLink, Route, Routes, useNavigate } from "react-router-dom";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import {
     knowledgeCategories,
     normalizeKnowledgeRecord,
@@ -199,14 +199,11 @@ function App() {
         setLearningMode,
     };
 
-    return ( <div className = "app-shell">
-        <Sidebar />
-        <div className = "main-wrapper">
-        <TopBar profile = { safeProfile } />
-        <div className = "main-shell">
+    return (
+        <AppShell profile={safeProfile}>
         <Routes>
         <Route path = "/"
-        element = { <HomePage data = { data } /> }
+        element = { <HomePage /> }
         /> <Route path = "/dashboard"
         element = { <DashboardPage data = { data } /> } /> <Route path = "/knowledge-base"
         element = { <KnowledgeBase data = { data }
@@ -253,9 +250,180 @@ function App() {
                                                     />} />
                                                     <Route path = "*"
                                                     element = { <FallbackPage /> } />
-                                                     </Routes> </div> </div> </div>
-                                                );
-                                            }
+        </Routes>
+        </AppShell>
+    );
+}
+
+function AppShell({ profile, children }) {
+    const isHome = useLocation().pathname === "/";
+
+    if (isHome) {
+        return <div className="landing-shell">{children}</div>;
+    }
+
+    return (
+        <div className="app-shell">
+            <Sidebar />
+            <div className="main-wrapper">
+                <TopBar profile={profile} />
+                <div className="main-shell">{children}</div>
+            </div>
+        </div>
+    );
+}
+
+const LANDING_NAV_LINKS = [
+    ["Home", "/"],
+    ["Dashboard", "/dashboard"],
+    ["Troubleshooting", "/troubleshooting"],
+    ["Knowledge Base", "/knowledge-base"],
+    ["Reports", "/repair-reports"],
+    ["Pricing", "/pricing"],
+];
+
+const LANDING_MORE_LINKS = [
+    ["Error Codes", "/error-codes"],
+    ["Commands", "/commands"],
+    ["Network Center", "/network-center"],
+    ["Labs", "/labs"],
+    ["AI Assistant", "/ai-assistant"],
+    ["AI Vision", "/ai-vision"],
+    ["Upload Docs", "/upload"],
+    ["Vendor Resources", "/vendor-resources"],
+    ["Profile", "/profile"],
+];
+
+function LandingNav() {
+    const location = useLocation();
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [moreOpen, setMoreOpen] = useState(false);
+
+    useEffect(() => {
+        setMobileOpen(false);
+        setMoreOpen(false);
+    }, [location.pathname]);
+
+    useEffect(() => {
+        if (!moreOpen) return undefined;
+
+        function handlePointerDown(event) {
+            if (!(event.target instanceof Element)) return;
+            if (!event.target.closest(".landing-more")) {
+                setMoreOpen(false);
+            }
+        }
+
+        document.addEventListener("pointerdown", handlePointerDown);
+        return () => document.removeEventListener("pointerdown", handlePointerDown);
+    }, [moreOpen]);
+
+    return (
+        <header className="landing-nav">
+            <div className="landing-nav-inner">
+                <Link className="landing-brand" to="/">
+                    <span className="landing-brand-mark">TM</span>
+                    <strong>TechMate AI</strong>
+                </Link>
+
+                <nav className="landing-nav-links" aria-label="Main navigation">
+                    {LANDING_NAV_LINKS.map(([label, path]) => (
+                        <NavLink
+                            key={path}
+                            to={path}
+                            className={({ isActive }) => isActive ? "landing-nav-link active" : "landing-nav-link"}
+                        >
+                            {label}
+                        </NavLink>
+                    ))}
+                    <div className="landing-more">
+                        <button
+                            type="button"
+                            className={`landing-more-toggle${moreOpen ? " open" : ""}`}
+                            aria-expanded={moreOpen}
+                            aria-haspopup="true"
+                            onClick={() => setMoreOpen((open) => !open)}
+                        >
+                            More
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
+                        </button>
+                        {moreOpen ? (
+                            <div className="landing-more-menu" role="menu">
+                                {LANDING_MORE_LINKS.map(([label, path]) => (
+                                    <NavLink
+                                        key={path}
+                                        to={path}
+                                        className={({ isActive }) => isActive ? "landing-more-link active" : "landing-more-link"}
+                                        role="menuitem"
+                                        onClick={() => setMoreOpen(false)}
+                                    >
+                                        {label}
+                                    </NavLink>
+                                ))}
+                            </div>
+                        ) : null}
+                    </div>
+                </nav>
+
+                <Link className="primary-btn landing-nav-cta" to="/ai-assistant">
+                    Ask TechMate AI
+                </Link>
+
+                <button
+                    type="button"
+                    className="landing-menu-toggle"
+                    aria-expanded={mobileOpen}
+                    aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                    onClick={() => setMobileOpen((open) => !open)}
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                        {mobileOpen ? (
+                            <>
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </>
+                        ) : (
+                            <>
+                                <line x1="3" y1="6" x2="21" y2="6" />
+                                <line x1="3" y1="12" x2="21" y2="12" />
+                                <line x1="3" y1="18" x2="21" y2="18" />
+                            </>
+                        )}
+                    </svg>
+                </button>
+            </div>
+
+            {mobileOpen ? (
+                <nav className="landing-mobile-menu" aria-label="Mobile navigation">
+                    {LANDING_NAV_LINKS.map(([label, path]) => (
+                        <NavLink
+                            key={path}
+                            to={path}
+                            className={({ isActive }) => isActive ? "landing-mobile-link active" : "landing-mobile-link"}
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            {label}
+                        </NavLink>
+                    ))}
+                    <div className="landing-mobile-more-label">More</div>
+                    {LANDING_MORE_LINKS.map(([label, path]) => (
+                        <NavLink
+                            key={path}
+                            to={path}
+                            className={({ isActive }) => isActive ? "landing-mobile-link active" : "landing-mobile-link"}
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            {label}
+                        </NavLink>
+                    ))}
+                    <Link className="primary-btn landing-mobile-cta" to="/ai-assistant" onClick={() => setMobileOpen(false)}>
+                        Ask TechMate AI
+                    </Link>
+                </nav>
+            ) : null}
+        </header>
+    );
+}
 
                                             function useLocalStorage(key, initialValue) {
                                                 const [value, setValue] = useState(() => {
@@ -1025,34 +1193,50 @@ function App() {
                                                 );
                                             }
 
-                                            function HomePage({ data }) {
-                                                const [scanIdx, setScanIdx] = useState(0);
-                                                const recentScans = [
-                                                    { label: "DHCP Issue", color: "#1e293b", text: "#fff", name: "Screenshot_2025-05-13_10-24.png", time: "2 minutes ago", bg: "linear-gradient(180deg, rgba(255,255,255,0.08), transparent 38%), repeating-linear-gradient(0deg, rgba(34,197,94,0.16) 0 1px, transparent 1px 12px), linear-gradient(135deg, #020617 0%, #111827 58%, #0f172a 100%)" },
-                                                    { label: "Windows Event", color: "#2563eb", text: "#fff", name: "Event_Viewer_Error.png", time: "45 minutes ago", bg: "linear-gradient(90deg, rgba(37,99,235,0.22) 0 26%, transparent 26%), repeating-linear-gradient(0deg, rgba(148,163,184,0.26) 0 1px, transparent 1px 13px), linear-gradient(135deg, #ffffff 0%, #eef4ff 100%)" },
-                                                    { label: "Blue Screen", color: "#1d4ed8", text: "#fff", name: "BSOD_MEMORY_MANAGEMENT.png", time: "1 hour ago", bg: "radial-gradient(circle at 18% 28%, rgba(255,255,255,0.36) 0 18px, transparent 19px), linear-gradient(135deg, #0f6bff 0%, #0757d8 55%, #043ea8 100%)" },
-                                                    { label: "Network Device", color: "#374151", text: "#fff", name: "Switch_Port_Issue.jpg", time: "2 hours ago", bg: "linear-gradient(175deg, transparent 0 46%, rgba(15,23,42,0.9) 47% 76%, transparent 77%), repeating-linear-gradient(90deg, transparent 0 15px, rgba(34,197,94,0.85) 15px 20px, transparent 20px 28px), linear-gradient(135deg, #f8fafc 0%, #dbeafe 100%)" },
-                                                ];
-                                                const visibleScans = 3;
+                                            function HomePage() {
+                                                const heroVideoRef = useRef(null);
+
+                                                useEffect(() => {
+                                                    const video = heroVideoRef.current;
+                                                    if (!video) return undefined;
+
+                                                    const ensurePlayback = () => {
+                                                        if (video.paused) {
+                                                            video.play().catch(() => {});
+                                                        }
+                                                    };
+
+                                                    ensurePlayback();
+                                                    video.addEventListener("loadeddata", ensurePlayback);
+                                                    video.addEventListener("canplay", ensurePlayback);
+
+                                                    return () => {
+                                                        video.removeEventListener("loadeddata", ensurePlayback);
+                                                        video.removeEventListener("canplay", ensurePlayback);
+                                                    };
+                                                }, []);
 
                                                 return (
-                                                    <main className="page workspace-home">
-                                                        <section className="hero-cinematic" aria-label="TechMate AI homepage hero">
+                                                    <div className="landing-page">
+                                                        <LandingNav />
+                                                        <section className="hero-cinematic hero-cinematic--landing" aria-label="TechMate AI homepage hero">
                                                             <div className="hero-cinematic-media" aria-hidden="true">
+                                                                <div className="hero-cinematic-fallback" />
                                                                 <video
+                                                                    ref={heroVideoRef}
                                                                     className="hero-cinematic-video"
                                                                     autoPlay
                                                                     muted
                                                                     loop
                                                                     playsInline
-                                                                    preload="metadata"
+                                                                    preload="auto"
                                                                 >
                                                                     <source
                                                                         src="/videos/techmateai-app-hero-modern-workspace-dusk.mp4"
                                                                         type="video/mp4"
                                                                     />
                                                                 </video>
-                                                                <div className="hero-cinematic-fallback" />
+                                                                <div className="hero-cinematic-vignette" />
                                                             </div>
                                                             <div className="hero-cinematic-copy">
                                                                 <div className="hero-cinematic-scrim">
@@ -1072,90 +1256,7 @@ function App() {
                                                                 </div>
                                                             </div>
                                                         </section>
-                                                        <div className="home-layout">
-                                                            <div className="home-main">
-
-                                                                <section className="home-cards-section">
-                                                                    <div className="home-cards-grid">
-                                                                        {ACTION_CARDS.map(({ label, path, desc, color, iconColor, icon }) => (
-                                                                            <Link to={path} key={label} className="action-card">
-                                                                                <div className="action-card-icon" style={{background: color, color: iconColor}}>{icon}</div>
-                                                                                <strong>{label}</strong>
-                                                                                <span>{desc}</span>
-                                                                                <span className="action-card-arrow">→</span>
-                                                                            </Link>
-                                                                        ))}
-                                                                    </div>
-                                                                </section>
-
-                                                                <section className="recent-scans-section">
-                                                                    <div className="recent-scans-header">
-                                                                        <h2>Recent Scans</h2>
-                                                                        <Link to="/ai-vision" className="view-all-link">View all scans →</Link>
-                                                                    </div>
-                                                                    <div className="recent-scans-wrap">
-                                                                        <button type="button" className="scroll-btn" onClick={() => setScanIdx(Math.max(0, scanIdx - 1))} disabled={scanIdx === 0}>‹</button>
-                                                                        <div className="recent-scans-track">
-                                                                            {recentScans.slice(scanIdx, scanIdx + visibleScans).map((scan) => (
-                                                                                <div className="recent-scan-item" key={scan.name}>
-                                                                                    <div className="scan-preview" style={{background: scan.bg}}>
-                                                                                        <span className="scan-label-badge" style={{background: scan.color, color: scan.text}}>{scan.label}</span>
-                                                                                    </div>
-                                                                                    <div className="scan-item-info">
-                                                                                        <span className="scan-item-name">{scan.name}</span>
-                                                                                        <span className="scan-item-time">{scan.time}</span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            ))}
-                                                                        </div>
-                                                                        <button type="button" className="scroll-btn" onClick={() => setScanIdx(Math.min(recentScans.length - visibleScans, scanIdx + 1))} disabled={scanIdx >= recentScans.length - visibleScans}>›</button>
-                                                                    </div>
-                                                                </section>
-                                                            </div>
-
-                                                            <div className="home-rail">
-                                                                <div className="rail-panel">
-                                                                    <h2>Recent Activity</h2>
-                                                                    <div className="rail-activity-list">
-                                                                        {RECENT_ACTIVITY_DATA.map((item) => (
-                                                                            <div className="rail-activity-item" key={item.label}>
-                                                                                <div className="rail-activity-icon" style={{background: item.bg, color: item.color}}>{item.icon}</div>
-                                                                                <div>
-                                                                                    <strong>{item.label}</strong>
-                                                                                    <span>{item.time}</span>
-                                                                                </div>
-                                                                            </div>
-                                                                        ))}
-                                                                    </div>
-                                                                    <Link to="/repair-reports" className="view-all-link" style={{display:"block",marginTop:"14px"}}>View all activity →</Link>
-                                                                </div>
-
-                                                                <div className="rail-panel">
-                                                                    <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"14px"}}>
-                                                                        <span style={{color:"var(--blue)"}}>💡</span>
-                                                                        <h2 style={{margin:0}}>Quick Tips</h2>
-                                                                    </div>
-                                                                    {QUICK_TIPS_DATA.map((tip, i) => (
-                                                                        <div className="tip-item" key={i}>
-                                                                            <span className="tip-bullet">●</span>
-                                                                            <span className="tip-text">{tip}</span>
-                                                                        </div>
-                                                                    ))}
-                                                                    <Link to="/troubleshooting" className="view-all-link" style={{display:"block",marginTop:"14px"}}>View all tips →</Link>
-                                                                </div>
-
-                                                                <div className="rail-panel">
-                                                                    <h2>Visual Hardware Library</h2>
-                                                                    <p style={{color:"var(--muted)",fontSize:"0.82rem",margin:"0 0 12px",lineHeight:"1.5"}}>Click any item to see images, brands, and safe handling steps.</p>
-                                                                    <div style={{display:"flex",flexWrap:"wrap",gap:"6px"}}>
-                                                                        {Object.entries(HARDWARE_ITEMS).map(([key, hw]) => (
-                                                                            <HardwareTerm name={key} key={key}>{hw.label}</HardwareTerm>
-                                                                        ))}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </main>
+                                                    </div>
                                                 );
                                             }
 
